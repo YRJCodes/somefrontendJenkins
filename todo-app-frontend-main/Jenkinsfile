@@ -13,7 +13,17 @@ pipeline {
                 echo "hello i have startyed"
             }
         }
-
+    stage('Build Docker Image') {
+    steps {
+        script {
+            echo "Building Docker image... adding path to current directory"
+            dir('todo-app-frontend-main') {
+                def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                env.IMAGE_ID = customImage.id
+            }
+        }
+    }
+}
         stage('Checkout Code') {
             steps {
                 git branch: 'branch1', url: 'https://github.com/YRJCodes/somefrontendJenkins.git'
